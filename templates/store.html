@@ -3,308 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ForexEdge — Professional Trading Tools</title>
+<title>ForexEdge — Professional Trading Tools · $20 Flat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<!-- PayPal SDK — hosted buttons component -->
 <script src="https://www.paypal.com/sdk/js?client-id=BAAYaynDxN9Mm7Kjl7pqxUpAD0UditJKt1p3kV2-QK2MsMxbnEiwckSGzUp3QQl_1r_rHJEh9lGv38Shp0&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
-
 <style>
-:root {
-  --bg:      #080a0f;
-  --surface: #0e1118;
-  --card:    #111620;
-  --border:  #1c2233;
-  --accent:  #00d4a0;
-  --accent2: #0ea5e9;
-  --gold:    #f59e0b;
-  --text:    #e2e8f0;
-  --muted:   #64748b;
-  --danger:  #ef4444;
-}
+:root{--bg:#080a0f;--surface:#0e1118;--card:#111620;--border:#1c2233;--accent:#00d4a0;--accent2:#0ea5e9;--gold:#f59e0b;--text:#e2e8f0;--muted:#64748b;--danger:#ef4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,160,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,160,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* ── Nav ── */
+nav{position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(8,10,15,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-.02em;}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;align-items:center;gap:1.6rem;}
+.nav-links a{color:var(--muted);font-size:.88rem;text-decoration:none;transition:color .18s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{padding:.42rem 1rem;border-radius:7px;background:var(--accent);color:#000!important;font-weight:700;font-size:.82rem;}
+@media(max-width:600px){.nav-links{gap:.9rem;}.nav-links a{font-size:.78rem;}}
 
-/* grid background */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(0,212,160,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,160,.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none; z-index: 0;
-}
+/* ── Hero ── */
+.hero{text-align:center;padding:6rem 2rem 4rem;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .9rem;border-radius:99px;border:1px solid rgba(0,212,160,.25);background:rgba(0,212,160,.07);color:var(--accent);font-size:.74rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:1.6rem;}
+.hero-badge::before{content:'🔥';}
+h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;margin-bottom:1rem;}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{color:var(--muted);font-size:1rem;max-width:520px;margin:0 auto 2rem;line-height:1.65;}
 
-/* ── Nav ─────────────────────────────────────── */
-nav {
-  position: sticky; top: 0; z-index: 90;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.1rem 2.5rem;
-  background: rgba(8,10,15,.88);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--border);
-}
-.logo { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; letter-spacing: -.02em; }
-.logo span { color: var(--accent); }
-.nav-links { display: flex; align-items: center; gap: 1.6rem; }
-.nav-links a { color: var(--muted); font-size: .88rem; text-decoration: none; transition: color .18s; }
-.nav-links a:hover { color: var(--text); }
-.nav-cta {
-  padding: .46rem 1.15rem; border-radius: 7px;
-  background: var(--accent); color: #000 !important; font-weight: 700; font-size: .82rem;
-}
+/* platform pills */
+.platform-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-bottom:2rem;}
+.plat-pill{padding:.38rem .9rem;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.8rem;font-weight:500;}
 
-/* ── Hero ────────────────────────────────────── */
-.hero {
-  text-align: center; padding: 7rem 2rem 4.5rem;
-  position: relative; z-index: 1;
-}
-.hero-badge {
-  display: inline-flex; align-items: center; gap: .45rem;
-  padding: .35rem .9rem; border-radius: 99px;
-  border: 1px solid rgba(0,212,160,.25); background: rgba(0,212,160,.07);
-  color: var(--accent); font-size: .74rem; font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase; margin-bottom: 1.8rem;
-}
-.hero-badge::before { content: '●'; font-size: .45rem; animation: blink 1.6s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+/* feature checklist */
+.feat-list{display:inline-flex;flex-direction:column;gap:.45rem;text-align:left;margin-bottom:2rem;}
+.feat-list li{list-style:none;font-size:.86rem;color:var(--muted);}
+.feat-list li::before{content:'✅ ';margin-right:.2rem;}
 
-h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  font-weight: 800; line-height: 1.08; letter-spacing: -.03em;
-  margin-bottom: 1.2rem;
-}
-h1 em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.hero > p { color: var(--muted); font-size: 1.05rem; max-width: 520px; margin: 0 auto 2.4rem; line-height: 1.65; }
+.price-pill{display:inline-flex;align-items:center;gap:.8rem;margin-top:1rem;padding:.7rem 1.4rem;background:var(--card);border:1px solid var(--border);border-radius:10px;}
+.price-pill .amt{font-family:'DM Mono',monospace;font-size:1.75rem;color:var(--accent);font-weight:500;}
+.price-pill .lbl{font-size:.82rem;color:var(--muted);line-height:1.35;text-align:left;}
 
-.hero-stats { display: flex; justify-content: center; gap: 3rem; }
-.hero-stat .num { font-family: 'Syne', sans-serif; font-size: 1.65rem; font-weight: 700; }
-.hero-stat .lbl { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
-
-/* flat price callout */
-.price-pill {
-  display: inline-flex; align-items: center; gap: .8rem;
-  margin-top: 2.2rem; padding: .7rem 1.4rem;
-  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-}
-.price-pill .amt { font-family: 'DM Mono', monospace; font-size: 1.75rem; color: var(--accent); font-weight: 500; }
-.price-pill .lbl { font-size: .82rem; color: var(--muted); line-height: 1.35; text-align: left; }
-
-/* ── Main content ────────────────────────────── */
-.wrap { max-width: 1160px; margin: 0 auto; padding: 3rem 2rem; position: relative; z-index: 1; }
-.section-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 1.8rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);
-}
-.section-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; }
-.section-count { font-size: .8rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+/* ── Wrap ── */
+.wrap{max-width:1160px;margin:0 auto;padding:2.5rem 2rem;position:relative;z-index:1;}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);}
+.section-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.section-count{font-size:.8rem;color:var(--muted);font-family:'DM Mono',monospace;}
 
 /* filters */
-.filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
-.filter-btn {
-  padding: .38rem .9rem; border-radius: 6px; border: 1px solid var(--border);
-  background: transparent; color: var(--muted); font-size: .78rem; cursor: pointer; transition: all .18s;
-}
-.filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,160,.06); }
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.filter-btn{padding:.38rem .9rem;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;cursor:pointer;transition:all .18s;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,160,.06);}
 
-/* ── Product grid ────────────────────────────── */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 1.2rem; }
-.card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-  padding: 1.6rem; display: flex; flex-direction: column;
-  position: relative; overflow: hidden;
-  transition: transform .22s, border-color .22s, box-shadow .22s;
-  animation: fadeUp .4s both;
-}
-.card:nth-child(2){animation-delay:.07s}.card:nth-child(3){animation-delay:.14s}
-.card:nth-child(4){animation-delay:.21s}.card:nth-child(5){animation-delay:.28s}
-.card:nth-child(6){animation-delay:.35s}
-@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+/* ── Product grid ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.2rem;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .22s,border-color .22s,box-shadow .22s;animation:fadeUp .4s both;}
+.card:nth-child(2){animation-delay:.07s}.card:nth-child(3){animation-delay:.14s}.card:nth-child(4){animation-delay:.21s}.card:nth-child(5){animation-delay:.28s}.card:nth-child(6){animation-delay:.35s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .22s;}
+.card:hover{transform:translateY(-4px);border-color:rgba(0,212,160,.28);box-shadow:0 20px 55px rgba(0,0,0,.45);}
+.card:hover::before{opacity:1;}
+.cat-badge{display:inline-flex;align-items:center;padding:.2rem .6rem;border-radius:4px;margin-bottom:.9rem;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.cat-EA{background:rgba(0,212,160,.1);color:var(--accent);}
+.cat-Script,.cat-PineScript{background:rgba(14,165,233,.1);color:var(--accent2);}
+.cat-Indicator{background:rgba(245,158,11,.1);color:var(--gold);}
+.cat-Course{background:rgba(167,139,250,.1);color:#a78bfa;}
+.cat-Other{background:rgba(100,116,139,.1);color:var(--muted);}
+.card h3{font-family:'Syne',sans-serif;font-size:1.06rem;font-weight:700;margin-bottom:.5rem;line-height:1.3;}
+.card p{color:var(--muted);font-size:.84rem;line-height:1.62;flex:1;margin-bottom:1.3rem;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.card-price{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--accent);}
+.btn-buy{padding:.54rem 1.2rem;border-radius:8px;border:none;background:var(--accent);color:#000;font-size:.84rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;transition:opacity .2s,transform .15s;}
+.btn-buy:hover{opacity:.88;transform:scale(1.03);}
 
-.card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  opacity: 0; transition: opacity .22s;
-}
-.card:hover { transform: translateY(-4px); border-color: rgba(0,212,160,.28); box-shadow: 0 20px 55px rgba(0,0,0,.45); }
-.card:hover::before { opacity: 1; }
+/* ── Empty state ── */
+.empty{text-align:center;padding:4rem 2rem;color:var(--muted);}
+.empty .ico{font-size:2.5rem;margin-bottom:.8rem;}
+.empty p{margin-bottom:.5rem;}
+.empty a{color:var(--accent2);text-decoration:none;}
 
-.cat-badge {
-  display: inline-flex; align-items: center; padding: .2rem .6rem; border-radius: 4px;
-  margin-bottom: 1rem; font-size: .68rem; font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase; font-family: 'DM Mono', monospace;
-}
-.cat-EA        { background:rgba(0,212,160,.1);  color:var(--accent);  }
-.cat-Script    { background:rgba(14,165,233,.1); color:var(--accent2); }
-.cat-Indicator { background:rgba(245,158,11,.1); color:var(--gold);    }
-.cat-Course    { background:rgba(167,139,250,.1);color:#a78bfa;        }
-.cat-Other     { background:rgba(100,116,139,.1);color:var(--muted);   }
+/* ── How It Works ── */
+.how-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 2rem;position:relative;z-index:1;}
+.how-inner{max-width:1000px;margin:0 auto;}
+.how-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;text-align:center;margin-bottom:2.2rem;}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;}
+.how-step{text-align:center;padding:1.5rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:12px;}
+.how-step .icon{font-size:2rem;margin-bottom:.8rem;}
+.how-step .num{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent);font-weight:600;letter-spacing:.08em;margin-bottom:.4rem;}
+.how-step h4{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.4rem;}
+.how-step p{font-size:.8rem;color:var(--muted);line-height:1.5;}
 
-.card h3 { font-family: 'Syne', sans-serif; font-size: 1.08rem; font-weight: 700; margin-bottom: .55rem; line-height: 1.3; }
-.card p  { color: var(--muted); font-size: .84rem; line-height: 1.62; flex: 1; margin-bottom: 1.4rem; }
+/* ── Broker section ── */
+.broker-section{padding:3.5rem 2rem;position:relative;z-index:1;}
+.broker-inner{max-width:900px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2.2rem;display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;}
+.broker-left{flex:1;min-width:220px;}
+.broker-left .tag{font-size:.7rem;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;}
+.broker-left h2{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:.6rem;}
+.broker-left p{color:var(--muted);font-size:.85rem;line-height:1.6;margin-bottom:1.2rem;}
+.btn-broker{display:inline-block;padding:.6rem 1.3rem;border-radius:8px;background:var(--accent);color:#000;font-weight:700;font-size:.85rem;text-decoration:none;transition:opacity .2s;}
+.btn-broker:hover{opacity:.88;}
+.broker-right{flex:1;min-width:220px;}
+.broker-feats{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+.broker-feats li{font-size:.85rem;color:var(--muted);}
+.broker-feats li::before{content:'✅ ';margin-right:.2rem;}
 
-.card-footer { display: flex; align-items: center; justify-content: space-between; }
-.card-price  { font-family: 'DM Mono', monospace; font-size: 1.2rem; color: var(--accent); }
+/* ── Affiliate section ── */
+.aff-section{background:var(--surface);border-top:1px solid var(--border);padding:3.5rem 2rem;position:relative;z-index:1;}
+.aff-inner{max-width:900px;margin:0 auto;text-align:center;}
+.aff-inner .tag{font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;}
+.aff-inner h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:.6rem;}
+.aff-inner p{color:var(--muted);font-size:.9rem;margin-bottom:2rem;}
+.aff-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.8rem;}
+.aff-step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem .8rem;}
+.aff-step .n{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;color:var(--gold);margin-bottom:.4rem;}
+.aff-step p{font-size:.8rem;color:var(--muted);line-height:1.5;margin:0;}
+.aff-cta{display:inline-block;padding:.65rem 1.5rem;border-radius:8px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--gold);font-weight:700;font-size:.9rem;text-decoration:none;transition:background .18s;}
+.aff-cta:hover{background:rgba(245,158,11,.2);}
+.aff-note{font-size:.75rem;color:var(--muted);margin-top:.8rem;}
 
-.btn-buy {
-  padding: .54rem 1.2rem; border-radius: 8px; border: none;
-  background: var(--accent); color: #000;
-  font-size: .84rem; font-weight: 700; cursor: pointer;
-  display: inline-flex; align-items: center; gap: .4rem;
-  transition: opacity .2s, transform .15s;
-}
-.btn-buy:hover { opacity: .88; transform: scale(1.03); }
+/* ── Lookup strip ── */
+.lookup-strip{background:var(--surface);border-top:1px solid var(--border);padding:1.1rem 2.5rem;text-align:center;font-size:.84rem;color:var(--muted);position:relative;z-index:1;}
+.lookup-strip a{color:var(--accent2);text-decoration:none;font-weight:500;}
+.lookup-strip a:hover{text-decoration:underline;}
 
-/* ── Empty state ─────────────────────────────── */
-.empty { text-align: center; padding: 5rem 2rem; color: var(--muted); }
-.empty .ico { font-size: 3rem; margin-bottom: 1rem; }
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding:1.6rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;color:var(--muted);font-size:.78rem;position:relative;z-index:1;}
+footer a{color:var(--muted);text-decoration:none;}
+footer a:hover{color:var(--text);}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-disclaimer{width:100%;font-size:.72rem;color:var(--muted);opacity:.7;border-top:1px solid var(--border);padding-top:1rem;margin-top:.5rem;line-height:1.6;}
 
-/* ── Lookup strip ────────────────────────────── */
-.lookup-strip {
-  background: var(--surface); border-top: 1px solid var(--border);
-  padding: 1.2rem 2.5rem; text-align: center;
-  font-size: .84rem; color: var(--muted); position: relative; z-index: 1;
-}
-.lookup-strip a { color: var(--accent2); text-decoration: none; font-weight: 500; }
-.lookup-strip a:hover { text-decoration: underline; }
-
-/* ── Footer ──────────────────────────────────── */
-footer {
-  border-top: 1px solid var(--border); padding: 1.8rem 2.5rem;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-  color: var(--muted); font-size: .78rem; position: relative; z-index: 1;
-}
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--text); }
-.footer-links { display: flex; gap: 1.5rem; }
-
-/* ════════════════════════════════════════════════
-   BUY MODAL
-════════════════════════════════════════════════ */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,.72); backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 1.5rem;
-  opacity: 0; pointer-events: none; transition: opacity .25s;
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-
-.modal {
-  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
-  padding: 2.2rem; width: 100%; max-width: 440px;
-  transform: translateY(20px) scale(.97); transition: transform .28s;
-  position: relative;
-}
-.modal-overlay.open .modal { transform: translateY(0) scale(1); }
-
-.modal-close {
-  position: absolute; top: 1rem; right: 1rem;
-  background: none; border: none; color: var(--muted); font-size: 1.3rem;
-  cursor: pointer; transition: color .18s; line-height: 1; padding: .2rem .4rem; border-radius: 4px;
-}
-.modal-close:hover { color: var(--text); background: var(--border); }
-
-.modal-header { margin-bottom: 1.4rem; }
-.modal-badge {
-  font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em;
-  font-family: 'DM Mono', monospace; margin-bottom: .5rem;
-}
-.modal-product-name {
-  font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800;
-  color: var(--text); margin-bottom: .3rem;
-}
-.modal-price-row {
-  display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem;
-}
-.modal-price {
-  font-family: 'DM Mono', monospace; font-size: 1.6rem; color: var(--accent); font-weight: 500;
-}
-.modal-price-note { font-size: .78rem; color: var(--muted); line-height: 1.4; }
-
-.modal-divider { border: none; border-top: 1px solid var(--border); margin: 1.2rem 0; }
-
-/* PayPal button container */
-#paypal-container-Q4B6YUQN6X5GS {
-  min-height: 48px; /* prevent layout jump */
-}
-
-.modal-note {
-  margin-top: 1rem; padding: .7rem .9rem;
-  background: rgba(14,165,233,.05); border: 1px solid rgba(14,165,233,.12); border-radius: 8px;
-  font-size: .75rem; color: var(--muted); line-height: 1.55;
-}
-.modal-note strong { color: var(--accent2); }
-
-/* Loading state inside modal */
-.paypal-loading {
-  display: flex; align-items: center; justify-content: center; gap: .6rem;
-  color: var(--muted); font-size: .84rem; padding: 1rem 0;
-}
-.spinner {
-  width: 18px; height: 18px; border: 2px solid var(--border);
-  border-top-color: var(--accent); border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* category ribbon on modal */
-.modal-cat {
-  display: inline-flex; align-items: center; padding: .18rem .55rem; border-radius: 4px;
-  font-size: .66rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  font-family: 'DM Mono', monospace; margin-left: .5rem;
-  vertical-align: middle;
-}
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:460px;padding:2rem;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:.3rem .5rem;border-radius:5px;}
+.modal-close:hover{color:var(--text);background:rgba(255,255,255,.06);}
+.modal-badge{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;}
+.modal-product-name{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.modal-cat{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.68rem;font-weight:700;font-family:'DM Mono',monospace;text-transform:uppercase;}
+.modal-price-row{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.5rem;}
+.modal-price{font-family:'DM Mono',monospace;font-size:2rem;color:var(--accent);}
+.modal-price-note{font-size:.78rem;color:var(--muted);line-height:1.4;}
+.modal-divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
+.paypal-loading{display:flex;align-items:center;gap:.6rem;color:var(--muted);font-size:.84rem;padding:.8rem 0;}
+.spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-note{background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.15);border-radius:8px;padding:.9rem 1rem;font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:1rem;}
+.modal-note strong{color:var(--accent2);}
 </style>
 </head>
 <body>
 
-<!-- ── Nav ─────────────────────────────────────── -->
+<!-- ── Nav ── -->
 <nav>
   <div class="logo">Forex<span>Edge</span></div>
   <div class="nav-links">
     <a href="#products">Products</a>
-    <a href="/lookup">Retrieve Download</a>
+    <a href="#broker">Broker</a>
+    <a href="#affiliate">Earn $5</a>
+    <a href="/lookup">My Download</a>
     <a href="#products" class="nav-cta">Shop Now — $20</a>
   </div>
 </nav>
 
-<!-- ── Hero ────────────────────────────────────── -->
+<!-- ── Hero ── -->
 <div class="hero">
-  <div class="hero-badge">MT4 Compatible · Instant Download</div>
-  <h1>Professional Forex<br><em>Trading Tools</em></h1>
-  <p>Expert Advisors, indicators, and scripts battle-tested across multiple pairs. Download instantly after payment.</p>
+  <div class="hero-badge">$20 flat · Instant download · No subscription</div>
+  <h1>Professional Forex<br><em>Tools for Every Platform</em></h1>
+  <p class="hero-sub">MT4 EAs · MT5 EAs · TradingView Pine Scripts · Courses — all $20, instant download after PayPal.</p>
 
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="num">{{ products|length }}+</div><div class="lbl">Products</div></div>
-    <div class="hero-stat"><div class="num">3×</div><div class="lbl">Downloads per purchase</div></div>
-    <div class="hero-stat"><div class="num">MT4</div><div class="lbl">Compatible</div></div>
+  <div class="platform-pills">
+    <div class="plat-pill">📊 MetaTrader 4</div>
+    <div class="plat-pill">📊 MetaTrader 5</div>
+    <div class="plat-pill">🌲 Pine Script</div>
+    <div class="plat-pill">📚 Courses</div>
   </div>
 
-  <div class="price-pill">
-    <div class="amt">$20</div>
-    <div class="lbl">Flat rate<br>every product</div>
-  </div>
+  <ul class="feat-list">
+    <li>Instant PayPal checkout</li>
+    <li>3 download slots per purchase</li>
+    <li>MT4/MT5 license key included</li>
+    <li>Recover download anytime</li>
+  </ul>
 </div>
 
-<!-- ── Products ─────────────────────────────────── -->
-<div class="wrap">
-  <div id="products" class="section-head">
+<!-- ── Products ── -->
+<div class="wrap" id="products">
+  <div class="section-head">
     <span class="section-title">All Products</span>
     <span class="section-count">{{ products|length }} available</span>
   </div>
@@ -320,22 +207,16 @@ footer a:hover { color: var(--text); }
       {% endif %}
     {% endfor %}
   </div>
-
   <div class="grid">
     {% for p in products %}
     <div class="card" data-cat="{{ p.category }}">
       <span class="cat-badge cat-{{ p.category.replace(' ','') }}">{{ p.category }}</span>
       <h3>{{ p.name }}</h3>
-      <p>{{ p.description or 'Professional-grade trading tool for MT4. Full documentation included.' }}</p>
+      <p>{{ p.description or 'Professional-grade trading tool. Full documentation included.' }}</p>
       <div class="card-footer">
-        <span class="card-price">$20.00</span>
-        <button class="btn-buy"
-          onclick="openBuyModal('{{ p.id }}', {{ p.name|tojson }}, '{{ p.category }}')"
-          data-product-id="{{ p.id }}">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-          </svg>
+        <span class="card-price">${{ "%.2f"|format(p.price or 20) }}</span>
+        <button class="btn-buy" onclick="openBuyModal('{{ p.id }}',{{ p.name|tojson }},'{{ p.category }}')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           Buy Now
         </button>
       </div>
@@ -345,54 +226,122 @@ footer a:hover { color: var(--text); }
 
   {% else %}
   <div class="empty">
-    <div class="ico">📦</div>
-    <p>Products coming soon — check back shortly.</p>
+    <div class="ico">🛠️</div>
+    <p><strong>Products loading…</strong></p>
+    <p>Message <a href="https://t.me/ForexEdgeBot">@ForexEdgeBot</a> on Telegram or check back shortly.</p>
   </div>
   {% endif %}
 </div>
 
-<!-- ── Lookup strip ─────────────────────────────── -->
-<div class="lookup-strip">
-  Already purchased? <a href="/lookup">Retrieve your download link →</a>
+<!-- ── How It Works ── -->
+<div class="how-section">
+  <div class="how-inner">
+    <div class="how-title">How It Works</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="icon">🛒</div>
+        <div class="num">1. Choose</div>
+        <h4>Pick Your Tool</h4>
+        <p>Pick the tool for your platform and trading style</p>
+      </div>
+      <div class="how-step">
+        <div class="icon">💳</div>
+        <div class="num">2. Pay $20</div>
+        <h4>One-Time PayPal</h4>
+        <p>One-time PayPal — no subscription ever</p>
+      </div>
+      <div class="how-step">
+        <div class="icon">⬇️</div>
+        <div class="num">3. Download</div>
+        <h4>Instant Access</h4>
+        <p>Enter your email, download instantly — up to 3 times</p>
+      </div>
+      <div class="how-step">
+        <div class="icon">🚀</div>
+        <div class="num">4. Trade</div>
+        <h4>Start Trading</h4>
+        <p>Add to MT4/MT5 or paste into TradingView</p>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ── Footer ──────────────────────────────────── -->
+<!-- ── Lookup strip ── -->
+<div class="lookup-strip">
+  Lost your link? <a href="/lookup">Retrieve it here with your PayPal TX ID →</a>
+</div>
+
+<!-- ── Broker section ── -->
+<div class="broker-section" id="broker">
+  <div class="broker-inner">
+    <div class="broker-left">
+      <div class="tag">📊 Recommended Broker</div>
+      <h2>Exness</h2>
+      <p>Best compatibility with our MT4 &amp; MT5 EAs. Ultra-low spreads, instant withdrawals, and prop-firm ready accounts.</p>
+      <a href="{{ exness_url }}" target="_blank" rel="noopener" class="btn-broker">Open Free Account →</a>
+    </div>
+    <div class="broker-right">
+      <ul class="broker-feats">
+        <li>MT4 &amp; MT5 — all EAs compatible</li>
+        <li>Spreads from 0.0 pips on majors</li>
+        <li>Instant withdrawals 24/7</li>
+        <li>Up to 1:2000 leverage</li>
+        <li>Cent accounts for beginners</li>
+        <li>Regulated globally</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── Affiliate section ── -->
+<div class="aff-section" id="affiliate">
+  <div class="aff-inner">
+    <div class="tag">💰 Affiliate Program</div>
+    <h2>Earn $5 Per Sale</h2>
+    <p>Refer traders — earn $5 for every sale. No cap. Paid monthly via PayPal on the 5th.</p>
+    <div class="aff-steps">
+      <div class="aff-step"><div class="n">1</div><p>Get your link from the bot</p></div>
+      <div class="aff-step"><div class="n">2</div><p>Share in forex groups</p></div>
+      <div class="aff-step"><div class="n">3</div><p>Earn $5 per sale</p></div>
+      <div class="aff-step"><div class="n">4</div><p>Paid on 5th monthly</p></div>
+    </div>
+    <a href="https://t.me/ForexEdgeBot" target="_blank" class="aff-cta">Message @ForexEdgeBot → type /ref</a>
+    <p class="aff-note">No cap on earnings · PayPal payout · Free to join</p>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
 <footer>
-  <div>© 2025 ForexEdge. All rights reserved.</div>
+  <div>© 2025 ForexEdge · Professional Trading Tools · All $20 flat · Instant Download</div>
   <div class="footer-links">
-    <a href="#">Terms</a>
-    <a href="#">Privacy</a>
-    <a href="/lookup">Order Lookup</a>
+    <a href="/">Home</a>
+    <a href="{{ exness_url }}" target="_blank" rel="noopener">Exness Broker</a>
+    <a href="/lookup">Retrieve Download</a>
+  </div>
+  <div class="footer-disclaimer">
+    Forex and CFD trading involves significant risk. Only trade money you can afford to lose.
+    Past performance of any EA or indicator does not guarantee future results.
+    ForexEdge provides tools only and does not offer financial advice.
   </div>
 </footer>
 
-
-<!-- ════════════════════════════════════════════════
-     BUY MODAL
-════════════════════════════════════════════════ -->
+<!-- ── Buy Modal ── -->
 <div class="modal-overlay" id="buyModal" onclick="handleOverlayClick(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeBuyModal()" aria-label="Close">✕</button>
-
-    <div class="modal-header">
-      <div class="modal-badge">You're purchasing</div>
-      <div class="modal-product-name" id="modal-name">—
-        <span class="modal-cat cat-EA" id="modal-cat-badge">EA</span>
-      </div>
-      <div class="modal-price-row">
-        <span class="modal-price">$20.00</span>
-        <span class="modal-price-note">one-time payment<br>3 downloads included</span>
-      </div>
+    <div class="modal-badge">You're purchasing</div>
+    <div class="modal-product-name" id="modal-name">—
+      <span class="modal-cat cat-EA" id="modal-cat-badge">EA</span>
     </div>
-
+    <div class="modal-price-row">
+      <span class="modal-price">$20.00</span>
+      <span class="modal-price-note">one-time payment<br>3 downloads included</span>
+    </div>
     <hr class="modal-divider">
-
-    <!-- PayPal hosted button renders here -->
     <div class="paypal-loading" id="paypal-loading">
       <div class="spinner"></div> Loading secure checkout…
     </div>
     <div id="paypal-container-Q4B6YUQN6X5GS"></div>
-
     <div class="modal-note">
       <strong>📌 After payment:</strong> PayPal will redirect you back here automatically.
       You'll enter your email to get your download link — valid for <strong>3 downloads</strong>.
@@ -401,45 +350,29 @@ footer a:hover { color: var(--text); }
   </div>
 </div>
 
-
 <script>
-// ── Category filter ───────────────────────────────────────────────────────
+// ── Category filter ────────────────────────────────────────────────────────
 function filterCards(btn, cat) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.grid .card').forEach(c => {
-    c.style.display = (cat === 'all' || c.dataset.sat === cat || c.dataset.cat === cat) ? '' : 'none';
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
   });
 }
 
-// ── Modal state ───────────────────────────────────────────────────────────
+// ── Modal ──────────────────────────────────────────────────────────────────
 let paypalRendered = false;
-let pendingProductId = null;
-
-const CAT_CLASSES = {
-  EA: 'cat-EA', Script: 'cat-Script', Indicator: 'cat-Indicator',
-  Course: 'cat-Course', Other: 'cat-Other'
-};
+const CAT_CLASSES = {EA:'cat-EA','Pine Script':'cat-PineScript',Script:'cat-Script',Indicator:'cat-Indicator',Course:'cat-Course',Other:'cat-Other'};
 
 async function openBuyModal(productId, productName, category) {
-  // 1. Update modal copy
   document.getElementById('modal-name').childNodes[0].textContent = productName + ' ';
-  const catBadge = document.getElementById('modal-cat-badge');
-  catBadge.textContent = category;
-  catBadge.className = 'modal-cat ' + (CAT_CLASSES[category] || 'cat-Other');
-
-  // 2. Save cart selection server-side (fires & forgets — best effort)
-  pendingProductId = productId;
+  const badge = document.getElementById('modal-cat-badge');
+  badge.textContent = category;
+  badge.className = 'modal-cat ' + (CAT_CLASSES[category] || 'cat-Other');
   fetch('/buy/' + productId).catch(() => {});
-
-  // 3. Open modal
   document.getElementById('buyModal').classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  // 4. Render PayPal button once
-  if (!paypalRendered) {
-    renderPayPal();
-  }
+  if (!paypalRendered) renderPayPal();
 }
 
 function closeBuyModal() {
@@ -453,27 +386,17 @@ function handleOverlayClick(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBuyModal(); });
 
-// ── PayPal hosted button ──────────────────────────────────────────────────
 function renderPayPal() {
   paypalRendered = true;
-  const loadingEl = document.getElementById('paypal-loading');
-
-  paypal.HostedButtons({
-    hostedButtonId: "Q4B6YUQN6X5GS",
-  })
-  .render("#paypal-container-Q4B6YUQN6X5GS")
-  .then(() => {
-    // Hide spinner once PayPal iframe loads
-    if (loadingEl) loadingEl.style.display = 'none';
-  })
-  .catch(err => {
-    console.error('PayPal render error:', err);
-    if (loadingEl) {
-      loadingEl.innerHTML = '⚠️ Could not load PayPal. Please <a href="https://www.paypal.com/ncp/payment/Q4B6YUQN6X5GS" target="_blank" style="color:var(--accent2)">click here to pay directly</a>.';
-    }
-  });
+  const loading = document.getElementById('paypal-loading');
+  paypal.HostedButtons({ hostedButtonId: "Q4B6YUQN6X5GS" })
+    .render("#paypal-container-Q4B6YUQN6X5GS")
+    .then(() => { if (loading) loading.style.display = 'none'; })
+    .catch(err => {
+      console.error('PayPal:', err);
+      if (loading) loading.innerHTML = '⚠️ Could not load PayPal. <a href="https://www.paypal.com/ncp/payment/Q4B6YUQN6X5GS" target="_blank" style="color:var(--accent2)">Pay directly →</a>';
+    });
 }
 </script>
-
 </body>
 </html>
