@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order Lookup — ForexEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0f;--card:#111620;--border:#1c2233;--accent:#00d4a0;--accent2:#0ea5e9;--text:#e2e8f0;--muted:#64748b;--danger:#ef4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,160,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,160,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.box{width:100%;max-width:460px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2.5rem;position:relative;z-index:1;}
+.icon{font-size:2.2rem;text-align:center;margin-bottom:1rem;}
+h1{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;text-align:center;margin-bottom:.4rem;}
+.sub{color:var(--muted);font-size:.86rem;text-align:center;margin-bottom:2rem;line-height:1.6;}
+label{display:block;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;}
+input{width:100%;padding:.65rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;margin-bottom:1.1rem;outline:none;transition:border-color .2s;font-family:'Inter',sans-serif;}
+input:focus{border-color:var(--accent);}
+.btn{width:100%;padding:.72rem;border-radius:8px;border:none;background:var(--accent);color:#000;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.btn:hover{opacity:.88;}
+.error{margin-bottom:1.2rem;padding:.7rem 1rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;font-size:.82rem;color:#fca5a5;}
+.back{text-align:center;margin-top:1.2rem;font-size:.82rem;color:var(--muted);}
+a{color:var(--accent2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="icon">🔍</div>
+  <h1>Retrieve Download</h1>
+  <p class="sub">Enter the Transaction ID from your PayPal receipt and the email you used during checkout.</p>
+
+  {% if error %}
+  <div class="error">⚠️ {{ error }}</div>
+  {% endif %}
+
+  <form method="POST">
+    <label>PayPal Transaction ID</label>
+    <input type="text" name="txn_id" placeholder="e.g. 5TV70626NR123456S" required>
+    <label>Email Address</label>
+    <input type="email" name="email" placeholder="trader@example.com" required autocomplete="email">
+    <button class="btn" type="submit">Find My Download</button>
+  </form>
+</div>
+<div class="back"><a href="/">← Back to Store</a></div>
+</body>
+</html>

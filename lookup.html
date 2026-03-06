@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — ForexEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0f;--surface:#0e1118;--card:#111620;--border:#1c2233;--accent:#00d4a0;--accent2:#0ea5e9;--gold:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--muted:#64748b;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
+/* Nav */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;background:rgba(8,10,15,.92);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);}
+.nav-brand{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;}.nav-brand span{color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:1.2rem;}
+.nav-stat{font-size:.78rem;color:var(--muted);}
+.nav-stat strong{color:var(--accent);font-family:'DM Mono',monospace;}
+.logout{padding:.38rem .9rem;border-radius:6px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:.78rem;text-decoration:none;transition:background .18s;}
+.logout:hover{background:rgba(239,68,68,.2);}
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 2rem;overflow-x:auto;}
+.tab{padding:.8rem 1.2rem;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;white-space:nowrap;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab:hover{color:var(--text);}
+/* Content */
+.panel{display:none;padding:2rem;max-width:1200px;}.panel.active{display:block;}
+/* Stats grid */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1rem;margin-bottom:2rem;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;}
+.stat-card .label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+.stat-card .value{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1;}
+.stat-card .value.green{color:var(--accent);}.stat-card .value.blue{color:var(--accent2);}.stat-card .value.gold{color:var(--gold);}
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+th{background:var(--surface);padding:.75rem 1rem;text-align:left;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+td{padding:.75rem 1rem;border-top:1px solid var(--border);vertical-align:middle;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:99px;font-size:.7rem;font-weight:600;}
+.badge-green{background:rgba(0,212,160,.12);color:var(--accent);}
+.badge-red{background:rgba(239,68,68,.12);color:var(--danger);}
+.badge-gold{background:rgba(245,158,11,.12);color:var(--gold);}
+.badge-blue{background:rgba(14,165,233,.12);color:var(--accent2);}
+/* Buttons */
+.btn{padding:.4rem .9rem;border-radius:6px;border:none;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .18s;}
+.btn-accent{background:var(--accent);color:#000;}.btn-accent:hover{opacity:.88;}
+.btn-danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;}.btn-danger:hover{background:rgba(239,68,68,.2);}
+.btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);}.btn-ghost:hover{color:var(--text);background:rgba(255,255,255,.08);}
+.btn-blue{background:var(--accent2);color:#fff;}.btn-blue:hover{opacity:.88;}
+/* Form */
+.form-row{display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:1.2rem;align-items:flex-end;}
+.form-group{display:flex;flex-direction:column;gap:.35rem;min-width:140px;}
+.form-group label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.form-group input,.form-group select{padding:.5rem .75rem;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;outline:none;font-family:'Inter',sans-serif;}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent);}
+.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.section-hd h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;}
+/* Upload zone */
+.upload-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+.upload-card h3{font-size:.9rem;font-weight:600;margin-bottom:1rem;color:var(--muted);}
+/* Toast */
+#toast{position:fixed;bottom:2rem;right:2rem;padding:.75rem 1.25rem;border-radius:8px;font-size:.85rem;font-weight:600;z-index:999;transform:translateY(100px);opacity:0;transition:all .25s;pointer-events:none;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{background:#065f46;border:1px solid var(--accent);color:var(--accent);}
+#toast.err{background:#7f1d1d;border:1px solid var(--danger);color:#fca5a5;}
+/* Ref link */
+.ref-link{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--accent2);background:rgba(14,165,233,.06);padding:.4rem .7rem;border-radius:6px;border:1px solid rgba(14,165,233,.15);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* Payout row */
+.payout-pending{color:var(--gold);font-weight:600;}
+.payout-paid{color:var(--accent);}
+/* File input */
+input[type=file]{padding:.4rem .5rem;font-size:.82rem;}
+.mono{font-family:'DM Mono',monospace;font-size:.75rem;}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-brand">Forex<span>Edge</span> <span style="color:var(--muted);font-size:.7rem;font-weight:400;">Admin</span></div>
+  <div class="nav-right">
+    <div class="nav-stat" id="nav-revenue"></div>
+    <div class="nav-stat" id="nav-today"></div>
+    <a href="/admin/logout" class="logout">Logout</a>
+  </div>
+</nav>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+  <div class="tab" onclick="showTab('products')">📦 Products</div>
+  <div class="tab" onclick="showTab('purchases')">🛒 Purchases</div>
+  <div class="tab" onclick="showTab('licenses')">🔑 Licenses</div>
+  <div class="tab" onclick="showTab('coupons')">🏷️ Coupons</div>
+  <div class="tab" onclick="showTab('referrals')">🔗 Referrals</div>
+  <div class="tab" onclick="showTab('payouts')">💰 Payouts</div>
+  <div class="tab" onclick="showTab('audit')">📋 Audit Log</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="panel active" id="panel-dashboard">
+  <div class="stats">
+    <div class="stat-card"><div class="label">Revenue (Total)</div><div class="value green" id="stat-revenue">—</div></div>
+    <div class="stat-card"><div class="label">Today's Sales</div><div class="value blue" id="stat-today">—</div></div>
+    <div class="stat-card"><div class="label">Confirmed Sales</div><div class="value" id="stat-confirmed">—</div></div>
+    <div class="stat-card"><div class="label">Total Purchases</div><div class="value" id="stat-purchases">—</div></div>
+    <div class="stat-card"><div class="label">Active Products</div><div class="value" id="stat-products">—</div></div>
+    <div class="stat-card"><div class="label">Pending Payouts</div><div class="value gold" id="stat-payouts">—</div></div>
+  </div>
+  <div style="color:var(--muted);font-size:.82rem;">
+    💡 <strong style="color:var(--text);">Payout Schedule:</strong> Referral audit runs automatically on the last day of each month.
+    Payouts are due by the 5th. Check the <strong style="color:var(--gold);">Payouts</strong> tab for details.
+    <button class="btn btn-ghost" style="margin-left:1rem;" onclick="triggerAudit()">▶ Run Audit Now</button>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="panel" id="panel-products">
+  <div class="upload-card">
+    <h3>Upload New Product</h3>
+    <div class="form-row">
+      <div class="form-group" style="flex:2;"><label>Product Name</label><input id="p-name" placeholder="XAUUSD Scalper EA v3"></div>
+      <div class="form-group"><label>Category</label>
+        <select id="p-cat"><option>EA</option><option>Indicator</option><option>Script</option><option>Pine Script</option><option>Course</option><option>Other</option></select>
+      </div>
+      <div class="form-group"><label>Price (USD)</label><input id="p-price" type="number" value="20" min="1" style="width:90px;"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:3;"><label>Description</label><input id="p-desc" placeholder="Brief description for store listing"></div>
+      <div class="form-group"><label>File (.ex4 .ex5 .mq4 .mq5 .pine)</label><input type="file" id="p-file"></div>
+      <button class="btn btn-accent" onclick="uploadProduct()">Upload</button>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>File</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody id="products-tbody"><tr><td colspan="7" style="color:var(--muted);text-align:center;padding:2rem;">Loading...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PURCHASES -->
+<div class="panel" id="panel-purchases">
+  <div class="section-hd">
+    <h2>Purchase Records</h2>
+    <input id="pur-search" placeholder="Search email / TXN / product..." style="padding:.45rem .9rem;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.82rem;width:260px;" oninput="filterPurchases()">
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Email</th><th>Product</th><th>TXN ID</th><th>Amount</th><th>Downloads</th><th>Confirmed</th><th>Coupon</th><th>Ref</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody id="purchases-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LICENSES -->
+<div class="panel" id="panel-licenses">
+  <div class="upload-card">
+    <h3>Create License Key</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Plan</label><select id="lic-plan"><option>monthly</option><option>quarterly</option><option>annual</option><option>lifetime</option></select></div>
+      <div class="form-group"><label>Duration (days)</label><input id="lic-days" type="number" value="31" min="1" max="36500" style="width:100px;"></div>
+      <div class="form-group" style="flex:2;"><label>Email (optional)</label><input id="lic-email" placeholder="customer@example.com"></div>
+      <button class="btn btn-accent" onclick="createLicense()">Generate Key</button>
+    </div>
+    <div id="new-key-box" style="display:none;margin-top:.75rem;padding:.8rem 1rem;background:rgba(0,212,160,.06);border:1px solid rgba(0,212,160,.2);border-radius:8px;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--accent);word-break:break-all;"></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Key</th><th>Plan</th><th>Email</th><th>Account Bound</th><th>Expires</th><th>Actions</th></tr></thead>
+      <tbody id="licenses-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- COUPONS -->
+<div class="panel" id="panel-coupons">
+  <div class="upload-card">
+    <h3>Create Coupon Code</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Code (blank = auto)</label><input id="c-code" placeholder="SUMMER20" style="text-transform:uppercase;"></div>
+      <div class="form-group"><label>Discount %</label><input id="c-pct" type="number" min="0" max="100" value="0" style="width:80px;"></div>
+      <div class="form-group"><label>Discount USD</label><input id="c-usd" type="number" min="0" step="0.01" value="0" style="width:90px;"></div>
+      <div class="form-group"><label>Max Uses (0=∞)</label><input id="c-max" type="number" min="0" value="0" style="width:90px;"></div>
+      <div class="form-group"><label>Expires</label><input id="c-exp" type="date"></div>
+      <button class="btn btn-accent" onclick="createCoupon()">Create</button>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Discount</th><th>Uses / Max</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="coupons-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- REFERRALS -->
+<div class="panel" id="panel-referrals">
+  <div class="upload-card">
+    <h3>Create Affiliate / Referral Code</h3>
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:1rem;">Each successful referred sale earns <strong style="color:var(--gold);">$5.00 commission</strong>. Paid out monthly on the 5th.</p>
+    <div class="form-row">
+      <div class="form-group"><label>Code (blank = auto)</label><input id="r-code" placeholder="JOHN10" style="text-transform:uppercase;"></div>
+      <div class="form-group" style="flex:2;"><label>Affiliate Name</label><input id="r-name" placeholder="John Doe"></div>
+      <div class="form-group" style="flex:2;"><label>Affiliate Email</label><input id="r-email" placeholder="john@example.com"></div>
+      <div class="form-group" style="flex:2;"><label>PayPal Email (for payouts)</label><input id="r-paypal" placeholder="john@paypal.com"></div>
+      <button class="btn btn-accent" onclick="createReferral()">Create</button>
+    </div>
+    <div id="ref-link-box" style="display:none;margin-top:.75rem;"></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Name</th><th>PayPal Email</th><th>Total Sales</th><th>Total Earned</th><th>Pending</th><th>Total Paid</th><th>Status</th><th>Referral Link</th><th>Actions</th></tr></thead>
+      <tbody id="referrals-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PAYOUTS -->
+<div class="panel" id="panel-payouts">
+  <div style="margin-bottom:1.5rem;padding:1rem 1.2rem;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;font-size:.85rem;line-height:1.6;">
+    <strong style="color:var(--gold);">💰 Payout Process:</strong><br>
+    1. Audit runs automatically on the <strong>last day of each month</strong> — email sent to <strong>morrynet@gmail.com</strong><br>
+    2. Pay each affiliate via PayPal (Friends & Family) by the <strong>5th of the month</strong><br>
+    3. Click <strong>Mark Paid</strong> after sending each payment<br>
+    <button class="btn btn-ghost" style="margin-top:.75rem;" onclick="triggerAudit()">▶ Run Audit Manually</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Period</th><th>Affiliate Code</th><th>PayPal Email</th><th>Amount</th><th>Status</th><th>Notes</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody id="payouts-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- AUDIT LOG -->
+<div class="panel" id="panel-audit">
+  <div class="section-hd">
+    <h2>Audit Log</h2>
+    <input id="audit-search" placeholder="Filter by action / actor..." style="padding:.45rem .9rem;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.82rem;width:240px;" oninput="filterAudit()">
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Target</th><th>Detail</th><th>IP</th></tr></thead>
+      <tbody id="audit-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const API = p => fetch(p).then(r => r.json());
+const CSRF_TOKEN = '{{ csrf_token() }}';
+const POST = (p, d) => fetch(p, {method:'POST', headers:{'Content-Type':'application/json','X-CSRF-Token':CSRF_TOKEN}, body:JSON.stringify({...d,_csrf:CSRF_TOKEN})}).then(r => r.json());
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const panels = ['dashboard','products','purchases','licenses','coupons','referrals','payouts','audit'];
+    t.classList.toggle('active', panels[i] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='dashboard') loadStats();
+  if(name==='products') loadProducts();
+  if(name==='purchases') loadPurchases();
+  if(name==='licenses') loadLicenses();
+  if(name==='coupons') loadCoupons();
+  if(name==='referrals') loadReferrals();
+  if(name==='payouts') loadPayouts();
+  if(name==='audit') loadAudit();
+}
+
+function toast(msg, ok=true) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = 'show ' + (ok ? 'ok' : 'err');
+  setTimeout(() => t.className = '', 3000);
+}
+
+// ── Dashboard ────────────────────────────────────────────────────────────────
+async function loadStats() {
+  const d = await API('/admin/api/stats');
+  $('#stat-revenue').textContent = '$' + (d.revenue||0).toFixed(2);
+  $('#stat-today').textContent = d.today_sales||0;
+  $('#stat-confirmed').textContent = d.confirmed||0;
+  $('#stat-purchases').textContent = d.purchases||0;
+  $('#stat-products').textContent = d.products||0;
+  $('#stat-payouts').textContent = '$' + (d.pending_payouts||0).toFixed(2);
+  $('#nav-revenue').innerHTML = 'Revenue: <strong>$'+(d.revenue||0).toFixed(2)+'</strong>';
+  $('#nav-today').innerHTML = 'Today: <strong>'+(d.today_sales||0)+' sales</strong>';
+}
+loadStats();
+
+async function triggerAudit() {
+  if(!confirm('Run monthly referral audit now? This will send the payout email and create payout records.')) return;
+  const r = await POST('/admin/api/payouts/trigger-audit',{});
+  if(r.ok) { toast(`Audit complete — ${r.payouts_created} payout(s) created. Email sent to morrynet@gmail.com`); }
+  else toast(r.error || 'Audit failed', false);
+}
+
+// ── Products ─────────────────────────────────────────────────────────────────
+async function loadProducts() {
+  const {products} = await API('/admin/api/products');
+  const tbody = $('#products-tbody');
+  if(!products.length) { tbody.innerHTML='<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:2rem;">No products yet</td></tr>'; return; }
+  tbody.innerHTML = products.map(p => `
+    <tr>
+      <td title="${p.name||''}">${p.name||'—'}</td>
+      <td><span class="badge badge-blue">${p.category||'—'}</span></td>
+      <td>$${(p.price||20).toFixed(2)}</td>
+      <td>${p.filename ? '✅ '+p.filename : '⚠️ Missing'}</td>
+      <td><span class="badge ${p.active?'badge-green':'badge-red'}">${p.active?'Active':'Hidden'}</span></td>
+      <td>${(p.created_at||'').substring(0,10)}</td>
+      <td style="display:flex;gap:.4rem;">
+        <button class="btn btn-ghost" onclick="toggleProduct('${p.id}')">${p.active?'Hide':'Show'}</button>
+        <button class="btn btn-danger" onclick="deleteProduct('${p.id}','${p.name.replace(/'/g,"\\'")}')">Del</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function uploadProduct() {
+  const fd = new FormData();
+  fd.append('name', $('#p-name').value);
+  fd.append('description', $('#p-desc').value);
+  fd.append('category', $('#p-cat').value);
+  fd.append('price', $('#p-price').value);
+  const f = $('#p-file').files[0];
+  if(f) fd.append('file', f);
+  if(!$('#p-name').value.trim()) { toast('Product name is required', false); return; }
+  fd.append('_csrf', CSRF_TOKEN);
+  const r = await fetch('/admin/api/products/upload', {method:'POST', headers:{'X-CSRF-Token':CSRF_TOKEN}, body:fd}).then(r=>r.json());
+  if(r.id) { toast('Product uploaded!'); loadProducts(); ['#p-name','#p-desc'].forEach(s => $(s).value=''); }
+  else toast(r.error||'Upload failed', false);
+}
+
+async function toggleProduct(id) {
+  const r = await POST('/admin/api/products/toggle', {id});
+  if('active' in r) { toast(r.active?'Product shown':'Product hidden'); loadProducts(); }
+  else toast(r.error||'Error', false);
+}
+
+async function deleteProduct(id, name) {
+  if(!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  const r = await POST('/admin/api/products/delete', {id});
+  if(r.ok) { toast('Deleted'); loadProducts(); }
+  else toast('Error', false);
+}
+
+// ── Purchases ────────────────────────────────────────────────────────────────
+let allPurchases = [];
+async function loadPurchases() {
+  const {purchases} = await API('/admin/api/purchases');
+  allPurchases = purchases;
+  renderPurchases(purchases);
+}
+function renderPurchases(list) {
+  const tbody = $('#purchases-tbody');
+  if(!list.length) { tbody.innerHTML='<tr><td colspan="10" style="color:var(--muted);text-align:center;padding:2rem;">No purchases</td></tr>'; return; }
+  tbody.innerHTML = list.map(p => `
+    <tr>
+      <td title="${p.email||''}">${p.email||'—'}</td>
+      <td title="${p.product_name||''}">${(p.product_name||'—').substring(0,20)}</td>
+      <td class="mono" title="${p.txn_id||''}">${(p.txn_id||'—').substring(0,18)}…</td>
+      <td>$${(p.amount_usd||0).toFixed(2)}</td>
+      <td>${p.downloads_used||0}/${p.max_downloads||3}</td>
+      <td><span class="badge ${p.confirmed?'badge-green':'badge-red'}">${p.confirmed?'✅':'⏳'}</span></td>
+      <td>${p.coupon_code||'—'}</td>
+      <td>${p.referral_code||'—'}</td>
+      <td>${(p.created_at||'').substring(0,10)}</td>
+      <td style="display:flex;gap:.35rem;">
+        <button class="btn btn-ghost" onclick="resetDl('${p.id}')">Reset DL</button>
+        <button class="btn btn-blue" onclick="extendDl('${p.id}')">+3</button>
+      </td>
+    </tr>`).join('');
+}
+function filterPurchases() {
+  const q = $('#pur-search').value.toLowerCase();
+  renderPurchases(q ? allPurchases.filter(p =>
+    (p.email||'').toLowerCase().includes(q) ||
+    (p.txn_id||'').toLowerCase().includes(q) ||
+    (p.product_name||'').toLowerCase().includes(q)) : allPurchases);
+}
+async function resetDl(id) {
+  const r = await POST('/admin/api/purchases/reset', {id});
+  if(r.ok) { toast('Downloads reset'); loadPurchases(); }
+}
+async function extendDl(id) {
+  const r = await POST('/admin/api/purchases/extend', {id, extra:3});
+  if(r.ok) { toast('+3 downloads added'); loadPurchases(); }
+}
+
+// ── Licenses ─────────────────────────────────────────────────────────────────
+async function loadLicenses() {
+  const {licenses} = await API('/admin/api/licenses');
+  const tbody = $('#licenses-tbody');
+  if(!licenses.length) { tbody.innerHTML='<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:2rem;">No licenses</td></tr>'; return; }
+  tbody.innerHTML = licenses.map(l => {
+    const exp = new Date(l.expiry); const expired = exp < new Date();
+    return `<tr>
+      <td class="mono" style="font-size:.72rem;">${l.key}</td>
+      <td>${l.plan||'monthly'}</td>
+      <td>${l.email||'—'}</td>
+      <td>${l.account||'<span style="color:var(--muted)">Unbound</span>'}</td>
+      <td><span class="badge ${expired?'badge-red':'badge-green'}">${(l.expiry||'').substring(0,10)}</span></td>
+      <td><button class="btn btn-danger" onclick="revokeLicense('${l.key}')">Revoke</button></td>
+    </tr>`;
+  }).join('');
+}
+async function createLicense() {
+  const r = await POST('/admin/api/licenses/create', {
+    plan:$('#lic-plan').value, days:$('#lic-days').value, email:$('#lic-email').value
+  });
+  if(r.key) {
+    toast('License created!');
+    $('#new-key-box').style.display='block';
+    $('#new-key-box').textContent='🔑 New Key: '+r.key+' (expires '+r.expiry.substring(0,10)+')';
+    loadLicenses();
+  } else toast(r.error||'Error', false);
+}
+async function revokeLicense(key) {
+  if(!confirm('Revoke this license? The EA will stop working immediately.')) return;
+  const r = await POST('/admin/api/licenses/revoke', {key});
+  if(r.ok) { toast('License revoked'); loadLicenses(); }
+}
+
+// ── Coupons ──────────────────────────────────────────────────────────────────
+async function loadCoupons() {
+  const {coupons} = await API('/admin/api/coupons');
+  const tbody = $('#coupons-tbody');
+  if(!coupons.length) { tbody.innerHTML='<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:2rem;">No coupons yet</td></tr>'; return; }
+  tbody.innerHTML = coupons.map(c => {
+    const disc = c.discount_pct ? c.discount_pct+'%' : '$'+(c.discount_usd||0).toFixed(2);
+    const exp = c.expires_at ? c.expires_at.substring(0,10) : '∞';
+    return `<tr>
+      <td class="mono" style="font-weight:700;color:var(--accent);">${c.code}</td>
+      <td>${disc} off</td>
+      <td>${c.uses}${c.max_uses?'  / '+c.max_uses:'  / ∞'}</td>
+      <td>${exp}</td>
+      <td><span class="badge ${c.active?'badge-green':'badge-red'}">${c.active?'Active':'Disabled'}</span></td>
+      <td><button class="btn btn-danger" onclick="deleteCoupon('${c.code}')">Disable</button></td>
+    </tr>`;
+  }).join('');
+}
+async function createCoupon() {
+  const code = $('#c-code').value.toUpperCase();
+  const r = await POST('/admin/api/coupons/create', {
+    code, discount_pct:$('#c-pct').value, discount_usd:$('#c-usd').value,
+    max_uses:$('#c-max').value, expires_at:$('#c-exp').value||null
+  });
+  if(r.code) { toast('Coupon created: '+r.code); loadCoupons(); $('#c-code').value=''; }
+  else toast(r.error||'Error', false);
+}
+async function deleteCoupon(code) {
+  const r = await POST('/admin/api/coupons/delete', {code});
+  if(r.ok) { toast('Coupon disabled'); loadCoupons(); }
+}
+
+// ── Referrals ────────────────────────────────────────────────────────────────
+async function loadReferrals() {
+  const {referrals} = await API('/admin/api/referrals');
+  const tbody = $('#referrals-tbody');
+  if(!referrals.length) { tbody.innerHTML='<tr><td colspan="10" style="color:var(--muted);text-align:center;padding:2rem;">No affiliates yet</td></tr>'; return; }
+  tbody.innerHTML = referrals.map(r => {
+    const storeUrl = window.location.origin;
+    const link = storeUrl+'/?ref='+r.code;
+    return `<tr>
+      <td class="mono" style="font-weight:700;color:var(--accent2);">${r.code}</td>
+      <td>${r.name||'—'}</td>
+      <td>${r.paypal_email||'<span style="color:var(--danger)">⚠️ Missing</span>'}</td>
+      <td>${r.total_sales||0}</td>
+      <td class="payout-paid">$${(r.total_earned||0).toFixed(2)}</td>
+      <td class="payout-pending">$${(r.pending_payout||0).toFixed(2)}</td>
+      <td>$${(r.total_paid||0).toFixed(2)}</td>
+      <td><span class="badge ${r.active?'badge-green':'badge-red'}">${r.active?'Active':'Paused'}</span></td>
+      <td><div class="ref-link" title="${link}">${link}</div></td>
+      <td style="display:flex;gap:.35rem;">
+        <button class="btn btn-ghost" onclick="copyLink('${link}')">Copy</button>
+        <button class="btn btn-ghost" onclick="toggleReferral('${r.code}')">${r.active?'Pause':'Resume'}</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+async function createReferral() {
+  const r = await POST('/admin/api/referrals/create', {
+    code:$('#r-code').value.toUpperCase(),
+    name:$('#r-name').value, email:$('#r-email').value,
+    paypal_email:$('#r-paypal').value, commission_usd:5
+  });
+  if(r.code) {
+    toast('Affiliate created!'); loadReferrals();
+    const box = $('#ref-link-box');
+    box.style.display='block';
+    box.innerHTML=`<div class="ref-link">${r.link}</div> <button class="btn btn-ghost" style="margin-top:.5rem;" onclick="copyLink('${r.link}')">Copy Link</button>`;
+    ['#r-code','#r-name','#r-email','#r-paypal'].forEach(s => $(s).value='');
+  } else toast(r.error||'Error', false);
+}
+async function toggleReferral(code) {
+  const r = await POST('/admin/api/referrals/toggle', {code});
+  if('active' in r) { toast(r.active?'Referral active':'Referral paused'); loadReferrals(); }
+}
+function copyLink(link) {
+  navigator.clipboard.writeText(link).then(() => toast('Link copied!'));
+}
+
+// ── Payouts ──────────────────────────────────────────────────────────────────
+async function loadPayouts() {
+  const {payouts} = await API('/admin/api/payouts');
+  const tbody = $('#payouts-tbody');
+  if(!payouts.length) { tbody.innerHTML='<tr><td colspan="8" style="color:var(--muted);text-align:center;padding:2rem;">No payout records yet. Audit runs on last day of each month.</td></tr>'; return; }
+  tbody.innerHTML = payouts.map(p => `
+    <tr>
+      <td class="mono">${p.period||'—'}</td>
+      <td class="mono" style="color:var(--accent2);">${p.referral_code||'—'}</td>
+      <td>${p.paypal_email||'<span style="color:var(--danger)">⚠️ Missing</span>'}</td>
+      <td class="${p.status==='paid'?'payout-paid':'payout-pending'} mono">$${(p.amount||0).toFixed(2)}</td>
+      <td><span class="badge ${p.status==='paid'?'badge-green':'badge-gold'}">${p.status||'pending'}</span></td>
+      <td style="max-width:200px;font-size:.75rem;">${p.notes||'—'}</td>
+      <td>${(p.created_at||'').substring(0,10)}</td>
+      <td>${p.status==='paid'
+        ? '<span style="color:var(--accent);font-size:.75rem;">✅ Paid '+((p.paid_at||'').substring(0,10))+'</span>'
+        : `<button class="btn btn-accent" onclick="markPaid(${p.id},'${(p.paypal_email||'').replace(/'/g,"\\'")}','$${(p.amount||0).toFixed(2)}')">Mark Paid</button>`
+      }</td>
+    </tr>`).join('');
+}
+async function markPaid(id, email, amount) {
+  const notes = prompt(`Confirm payment of ${amount} to ${email}?\n\nOptional notes (e.g. PayPal ref):`, '');
+  if(notes===null) return;
+  const r = await POST('/admin/api/payouts/mark-paid', {id, notes});
+  if(r.ok) { toast('Payout marked as paid!'); loadPayouts(); loadStats(); }
+  else toast(r.error||'Error', false);
+}
+
+// ── Audit Log ────────────────────────────────────────────────────────────────
+let allAudit = [];
+async function loadAudit() {
+  const {logs} = await API('/admin/api/audit?limit=500');
+  allAudit = logs;
+  renderAudit(logs);
+}
+function renderAudit(list) {
+  const tbody = $('#audit-tbody');
+  if(!list.length) { tbody.innerHTML='<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:2rem;">No logs</td></tr>'; return; }
+  const colours = {admin_login:'badge-blue',ipn_verified:'badge-green',file_download:'badge-blue',ipn_refund:'badge-red',ipn_invalid:'badge-red',claim_download:'badge-green',revoke_license:'badge-red'};
+  tbody.innerHTML = list.map(l => `
+    <tr>
+      <td class="mono" style="font-size:.72rem;">${(l.created_at||'').substring(0,19).replace('T',' ')}</td>
+      <td>${l.actor||'system'}</td>
+      <td><span class="badge ${colours[l.action]||'badge-ghost'}" style="${colours[l.action]?'':'background:rgba(255,255,255,.05);color:var(--muted);'}">${l.action}</span></td>
+      <td class="mono" style="font-size:.72rem;" title="${l.target||''}">${(l.target||'—').substring(0,20)}</td>
+      <td style="font-size:.75rem;color:var(--muted);" title="${l.detail||''}">${(l.detail||'—').substring(0,50)}</td>
+      <td class="mono" style="font-size:.72rem;color:var(--muted);">${l.ip_address||'—'}</td>
+    </tr>`).join('');
+}
+function filterAudit() {
+  const q = $('#audit-search').value.toLowerCase();
+  renderAudit(q ? allAudit.filter(l =>
+    (l.action||'').includes(q)||(l.actor||'').includes(q)||(l.target||'').includes(q)) : allAudit);
+}
+</script>
+</body>
+</html>

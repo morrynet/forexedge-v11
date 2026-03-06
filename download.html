@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment Successful — ForexEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0f;--card:#111620;--border:#1c2233;--accent:#00d4a0;--accent2:#0ea5e9;--text:#e2e8f0;--muted:#64748b;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,160,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,160,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.box{width:100%;max-width:520px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2.5rem;position:relative;z-index:1;}
+.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,212,160,.12);border:2px solid rgba(0,212,160,.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1.5rem;}
+h1{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;text-align:center;margin-bottom:.5rem;}
+.sub{color:var(--muted);font-size:.88rem;text-align:center;margin-bottom:2rem;line-height:1.6;}
+.txn-box{background:rgba(0,212,160,.05);border:1px solid rgba(0,212,160,.2);border-radius:8px;padding:.75rem 1rem;margin-bottom:2rem;font-family:'DM Mono',monospace;font-size:.8rem;color:var(--muted);}
+.txn-box span{color:var(--accent);word-break:break-all;}
+label{display:block;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;}
+input,select{width:100%;padding:.65rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;margin-bottom:1.1rem;outline:none;transition:border-color .2s;font-family:'Inter',sans-serif;}
+input:focus,select:focus{border-color:var(--accent);}
+.btn{width:100%;padding:.75rem;border-radius:8px;border:none;background:var(--accent);color:#000;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.btn:hover{opacity:.88;}
+.note{margin-top:1.2rem;padding:.75rem;background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.15);border-radius:8px;font-size:.78rem;color:var(--muted);line-height:1.55;}
+.note strong{color:var(--accent2);}
+a{color:var(--accent2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.back{text-align:center;margin-top:1.5rem;font-size:.82rem;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="success-icon">✓</div>
+  <h1>Payment Successful!</h1>
+  <p class="sub">Thank you for your purchase. Enter your details below to get your download link.</p>
+
+  {% if tx %}
+  <div class="txn-box">Transaction ID: <span>{{ tx }}</span></div>
+  {% endif %}
+
+  <form method="POST" action="/payment/claim">
+    <input type="hidden" name="tx" value="{{ tx }}">
+
+    <label>Your Email Address</label>
+    <input type="email" name="email" placeholder="trader@example.com" required autocomplete="email">
+
+    <label>Select Your Product</label>
+    <select name="product_id" required>
+      <option value="">-- Choose a product --</option>
+      {% for p in products %}
+      <option value="{{ p.id }}" {% if p.id == product_id %}selected{% endif %}>
+        {{ p.name }} ({{ p.category }})
+      </option>
+      {% endfor %}
+    </select>
+
+    <button class="btn" type="submit">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Get My Download Link
+    </button>
+  </form>
+
+  <div class="note">
+    <strong>📌 Important:</strong> Save your Transaction ID and email. You can use them at the
+    <a href="/lookup">order lookup page</a> to retrieve your download link at any time
+    (up to <strong>3 downloads</strong> per purchase).
+  </div>
+</div>
+<div class="back"><a href="/">← Back to Store</a></div>
+</body>
+</html>
