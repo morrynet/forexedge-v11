@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error — ForexEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0f;--card:#111620;--border:#1c2233;--accent2:#0ea5e9;--text:#e2e8f0;--muted:#64748b;--danger:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+.box{width:100%;max-width:440px;background:var(--card);border:1px solid rgba(239,68,68,.3);border-radius:16px;padding:2.5rem;text-align:center;}
+.icon{font-size:2.5rem;margin-bottom:1rem;}
+h1{font-family:'Syne',sans-serif;font-size:1.4rem;margin-bottom:.8rem;}
+p{color:var(--muted);font-size:.88rem;line-height:1.65;margin-bottom:1.5rem;}
+a{display:inline-block;padding:.6rem 1.4rem;border-radius:8px;background:var(--accent2);color:#fff;text-decoration:none;font-size:.88rem;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="icon">⚠️</div>
+  <h1>Something went wrong</h1>
+  <p>{{ msg }}</p>
+  <a href="/">Back to Store</a>
+</div>
+</body>
+</html>

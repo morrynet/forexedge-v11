@@ -64,7 +64,8 @@ def query(sql, params=(), fetchone=False, fetchall=False, commit=False):
         else: conn.close()
 
 # ── App ────────────────────────────────────────────────────────────────────────
-app = Flask(__name__)
+_here = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, template_folder=os.path.join(_here,"templates"), static_folder=os.path.join(_here,"static"))
 app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",

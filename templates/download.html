@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download — ForexEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0f;--card:#111620;--border:#1c2233;--accent:#00d4a0;--accent2:#0ea5e9;--gold:#f59e0b;--text:#e2e8f0;--muted:#64748b;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,160,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,160,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.box{width:100%;max-width:500px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2.5rem;position:relative;z-index:1;}
+.dl-icon{width:72px;height:72px;border-radius:50%;background:rgba(0,212,160,.1);border:2px solid rgba(0,212,160,.25);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem;}
+h1{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;text-align:center;margin-bottom:.4rem;}
+.prod-name{text-align:center;color:var(--accent);font-family:'DM Mono',monospace;font-size:.9rem;margin-bottom:1.8rem;}
+
+/* Download counter */
+.counter{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-bottom:2rem;padding:1.2rem;background:rgba(0,0,0,.3);border-radius:10px;border:1px solid var(--border);}
+.counter-item{text-align:center;}
+.counter-item .n{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;line-height:1;}
+.counter-item .l{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:.3rem;}
+.counter-sep{color:var(--border);font-size:1.5rem;font-weight:200;}
+.used-color{color:var(--accent);}
+.rem-color{color:{% if max - used == 0 %}var(--danger){% elif max - used == 1 %}var(--gold){% else %}var(--accent2){% endif %};}
+
+/* Progress dots */
+.dots{display:flex;justify-content:center;gap:.5rem;margin-bottom:2rem;}
+.dot{width:28px;height:8px;border-radius:99px;}
+{% for i in range(max) %}
+.dot:nth-child({{ i+1 }}){background:{% if i < used %}var(--accent){% else %}var(--border){% endif %};}
+{% endfor %}
+
+/* Button */
+.btn-dl{
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  width:100%;padding:.85rem;border-radius:10px;border:none;
+  background:var(--accent);color:#000;font-size:1.05rem;font-weight:700;
+  cursor:pointer;text-decoration:none;transition:opacity .2s,transform .15s;
+  margin-bottom:1.2rem;
+}
+.btn-dl:hover{opacity:.88;transform:scale(1.01);}
+.btn-dl.disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;}
+
+/* Token box */
+.token-box{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);padding:.6rem .8rem;background:rgba(0,0,0,.4);border-radius:6px;border:1px solid var(--border);word-break:break-all;margin-bottom:1.2rem;}
+.token-box span{color:var(--muted);font-size:.65rem;display:block;margin-bottom:.2rem;text-transform:uppercase;letter-spacing:.05em;}
+
+.note{padding:.75rem;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:8px;font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:1rem;}
+.note strong{color:var(--gold);}
+.back{text-align:center;margin-top:1.2rem;font-size:.82rem;color:var(--muted);}
+a.link{color:var(--accent2);text-decoration:none;}
+a.link:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="dl-icon">⬇</div>
+  <h1>Your Download</h1>
+  <div class="prod-name">{{ product_name }}</div>
+
+  <!-- Counter -->
+  <div class="counter">
+    <div class="counter-item">
+      <div class="n used-color">{{ used }}</div>
+      <div class="l">Used</div>
+    </div>
+    <div class="counter-sep">/</div>
+    <div class="counter-item">
+      <div class="n">{{ max }}</div>
+      <div class="l">Total</div>
+    </div>
+    <div class="counter-sep">·</div>
+    <div class="counter-item">
+      <div class="n rem-color">{{ max - used }}</div>
+      <div class="l">Remaining</div>
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="dots">
+    {% for i in range(max) %}
+    <div class="dot"></div>
+    {% endfor %}
+  </div>
+
+  {% if used < max %}
+  <a href="/download/{{ token }}" class="btn-dl">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download File ({{ max - used }} left)
+  </a>
+  {% else %}
+  <div class="btn-dl disabled">
+    Download Limit Reached ({{ max }}/{{ max }})
+  </div>
+  {% endif %}
+
+  <!-- Save token -->
+  <div class="token-box">
+    <span>🔑 Your secure download link — bookmark this page or save the token</span>
+    {{ token }}
+  </div>
+
+  <div class="note">
+    <strong>⚠️ Save this page!</strong> Bookmark it or note your token above.
+    Each purchase includes <strong>{{ max }} downloads</strong>. If you need more, contact support.
+    Downloads are for <strong>personal use only</strong>.
+  </div>
+
+  <div class="note" style="background:rgba(14,165,233,.05);border-color:rgba(14,165,233,.15);">
+    <strong style="color:var(--accent2);">📧 {{ email }}</strong><br>
+    Lost this page? Use your email + Transaction ID at the
+    <a href="/lookup" class="link">order lookup page</a>.
+  </div>
+</div>
+<div class="back"><a href="{{ store_url or '/' }}" class="link">← Back to Store</a></div>
+</body>
+</html>
