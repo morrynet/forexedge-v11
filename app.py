@@ -729,3 +729,23 @@ if __name__=="__main__":
     from migrations import run_migrations
     run_migrations()
     app.run(host="0.0.0.0",port=int(os.environ.get("PORT",5000)),debug=False)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  BOT THREAD — runs the Telegram bot inside the web process (free tier hack)
+#  Set RUN_BOT=true in environment to enable.
+# ══════════════════════════════════════════════════════════════════════════════
+def _start_bot_thread():
+    import threading, importlib
+    def _run():
+        try:
+            bot_mod = importlib.import_module("bot")
+            bot_mod.main()
+        except Exception as e:
+            log.error("Bot thread crashed: %s", e)
+    t = threading.Thread(target=_run, name="telegram-bot", daemon=True)
+    t.start()
+    log.info("Telegram bot started in background thread.")
+
+if os.environ.get("RUN_BOT", "false").lower() == "true":
+    _start_bot_thread()
