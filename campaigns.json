@@ -1,0 +1,87 @@
+[
+  {
+    "name": "join_forex_groups",
+    "type": "join_groups",
+    "enabled": false,
+    "description": "Week 1 warm-up: join target groups. Enable manually after review.",
+    "groups": [
+      "@forex_signals_live",
+      "@mt4_mt5_experts",
+      "@xauusd_traders",
+      "@prop_firm_traders",
+      "@forexEAcommunity"
+    ]
+  },
+  {
+    "name": "create_main_channel",
+    "type": "create_channel",
+    "enabled": false,
+    "description": "Run ONCE to create your broadcast channel.",
+    "title": "ForexEdge Trading Tools",
+    "about": "Daily trading tips, EA updates & exclusive signals. Tools at https://yourstore.com",
+    "is_channel": true
+  },
+  {
+    "name": "create_community_group",
+    "type": "create_channel",
+    "enabled": false,
+    "description": "Run ONCE to create your community supergroup.",
+    "title": "ForexEdge Community",
+    "about": "Traders helping traders. EA reviews, setups & tips. Store: https://yourstore.com",
+    "is_channel": false
+  },
+  {
+    "name": "daily_channel_posts",
+    "type": "post_own_channels",
+    "enabled": false,
+    "description": "Week 2+: post AI content to owned channels every 6h.",
+    "interval_hours": 6
+  },
+  {
+    "name": "engagement_poll",
+    "type": "send_poll",
+    "enabled": false,
+    "description": "Engagement poll for owned channels.",
+    "question": "Which platform are you mainly trading on?",
+    "options": ["MT4", "MT5", "TradingView (Pine Script)", "All of them"]
+  },
+  {
+    "name": "broadcast_pitch",
+    "type": "broadcast",
+    "enabled": false,
+    "description": "Broadcast to joined groups. Enable only after 2+ weeks warm-up.",
+    "message": "Running a promo this week — ForexEdge EAs from $20. XAUUSD, Boom & Crash, Prop Firm-ready. https://yourstore.com",
+    "max_groups": 3
+  },
+  {
+    "name": "dm_campaign_xauusd",
+    "type": "dm_campaign",
+    "enabled": false,
+    "description": "Week 3+: DM high-value targets from XAUUSD groups. Start with limit=10.",
+    "groups": ["@xauusd_traders","@goldtraders_fx"],
+    "limit": 10,
+    "invite_to_channel": null
+  },
+  {
+    "name": "growth_loop_main",
+    "type": "growth_loop",
+    "enabled": false,
+    "description": "Full growth loop — scrape → DM → invite to own channel. Run weekly.",
+    "source_groups": ["@forex_signals_live","@mt4_mt5_experts"],
+    "own_channel_id": 0
+  },
+  {
+    "name": "follow_up_warm_leads",
+    "type": "follow_up_warm",
+    "enabled": false,
+    "description": "DM users who showed warm signals in group chats (looking to buy, asking for EAs).",
+    "note": "Review group_engagements table first to validate targets before enabling."
+  },
+  {
+    "name": "leave_stale_groups",
+    "type": "leave_stale",
+    "enabled": true,
+    "description": "Auto-leave groups with no activity in 7 days. Safe to keep enabled.",
+    "days": 7
+  }
+]

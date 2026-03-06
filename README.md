@@ -1,178 +1,188 @@
-# 📈 ForexEdge
+# ForexEdge SaaS — v3.0
 
-Professional Forex Tools store — MT4/MT5 EAs, Pine Script strategies, and courses — sold at a flat $20 via PayPal with instant download delivery.
-
-Built with Flask, deployed on Render, with a Telegram bot and optional userbot for growth automation.
-
----
-
-## Project Structure
-
-```
-forexedge/
-├── app.py               # Flask web app (store, payments, admin, API)
-├── bot.py               # Telegram bot (customer support, /ref, AI chat)
-├── userbot.py           # Telethon userbot (growth campaigns)
-├── migrations.py        # DB migration runner (SQLite + PostgreSQL)
-├── campaigns.json       # Userbot campaign config
-├── gen_keys.py          # Secret key & password hash generator
-├── requirements.txt
-├── render.yaml          # Render deployment config (3 services)
-└── templates/
-    ├── store.html
-    ├── success.html
-    ├── download.html
-    ├── lookup.html
-    ├── login.html
-    ├── error.html
-    └── admin.html
-```
-
-> ⚠️ All HTML files must live inside a `templates/` subfolder for Flask to find them.
+Complete forex EA / indicator e-commerce platform.
+Three-service architecture: Flask API · Customer Service Bot · Marketing Userbot.
 
 ---
 
-## Services (render.yaml)
+## What's New in v3
 
-| Service | Type | Description |
+| Area | v2 | v3 |
 |---|---|---|
-| `forexedge-api` | Web | Flask store + PayPal IPN + admin dashboard |
-| `forexedge-bot` | Worker | Telegram customer bot |
-| `forexedge-userbot` | Worker | Telethon growth automation |
+| CSRF | Generated but not checked | ✅ Enforced on every POST |
+| Rate limiting | In-process (breaks with multiple workers) | ✅ Redis-backed sliding window |
+| Admin password | Plaintext in `ADMIN_PASS` env | ✅ bcrypt hash in `ADMIN_PASS_HASH` |
+| API keys | Single shared `API_SECRET` | ✅ Per-service `BOT_API_KEY` / `USERBOT_API_KEY` |
+| PayPal IPN | Amount check only | ✅ receiver_email + currency + amount |
+| Error responses | Raw exceptions exposed | ✅ Sanitised messages, internal errors logged |
+| DB migrations | Manual `init_db.py` | ✅ Versioned migration system |
+| Tests | None | ✅ 40+ pytest tests |
+| Conversation history | In-process memory | ✅ Redis-backed (survives restarts) |
+| Userbot campaigns | Some enabled by default | ✅ All opt-in, only `leave_stale` auto-runs |
+| Referral payouts | Manual tracking | ✅ Auto audit email on last day of month |
+| Admin UI | Products / purchases / licenses | ✅ Coupons + Referrals + Payouts tabs |
 
 ---
 
 ## Quick Start
 
-### 1. Generate secrets
-
+### 1. Hash your admin password
 ```bash
-python gen_keys.py yourAdminPassword
+python hash_password.py
+# → copies ADMIN_PASS_HASH=pbkdf2:... to put in your env
 ```
 
-Copy the output values into Render's environment variables.
-
-### 2. Set environment variables on Render
-
-See the full reference below. At minimum you need:
-
-- `SECRET_KEY`
-- `ADMIN_PASS_HASH` + `ADMIN_PASS`
-- `PAYPAL_EMAIL`
-- `STORE_URL` (your Render URL, e.g. `https://forexedge-api.onrender.com`)
-- `BOT_API_KEY` (shared between `forexedge-api` and `forexedge-bot`)
-- `TELEGRAM_BOT_TOKEN`
-
-### 3. Deploy
-
-Push to GitHub — Render auto-deploys all three services.  
-Migrations run automatically on each deploy via the build command:
-
-```
-pip install -r requirements.txt && python migrations.py
+### 2. Set environment variables
+```bash
+cp .env.example .env
+# Fill in all values — especially:
+#   ADMIN_PASS_HASH, DATABASE_URL, REDIS_URL,
+#   PAYPAL_RECEIVER_EMAIL, SMTP_USER, SMTP_PASS
 ```
 
----
-
-## Environment Variables
-
-### forexedge-api (Web)
-
-| Variable | Required | Description |
-|---|---|---|
-| `SECRET_KEY` | ✅ | Flask session secret (generate with `gen_keys.py`) |
-| `ADMIN_USER` | ✅ | Admin username (default: `admin`) |
-| `ADMIN_PASS_HASH` | ✅ | Werkzeug password hash (from `gen_keys.py`) |
-| `ADMIN_PASS` | ✅ | Plaintext password (used by bot API auth) |
-| `PAYPAL_EMAIL` | ✅ | Your PayPal business email |
-| `STORE_URL` | ✅ | Full public URL of this service |
-| `BOT_API_KEY` | ✅ | Shared secret for bot ↔ API calls |
-| `USERBOT_API_KEY` | ✅ | Shared secret for userbot ↔ API calls |
-| `BOT_USERNAME` | ✅ | Telegram bot username (without @) |
-| `ANTHROPIC_API_KEY` | optional | Enables AI responses in the bot |
-| `SMTP_HOST` | optional | SMTP server for email receipts |
-| `SMTP_PORT` | optional | Default: `587` |
-| `SMTP_USER` | optional | SMTP login |
-| `SMTP_PASS` | optional | SMTP password |
-| `AUDIT_EMAIL` | optional | Receives audit/alert emails |
-| `PAYPAL_SANDBOX` | optional | Set `true` for testing |
-| `PRICE_USD` | optional | Default product price (default: `20.00`) |
-| `MAX_DOWNLOADS` | optional | Download slots per purchase (default: `3`) |
-| `DATABASE_URL` | optional | PostgreSQL URL — uses SQLite if not set |
-
-### forexedge-bot (Worker)
-
-| Variable | Required | Description |
-|---|---|---|
-| `TELEGRAM_BOT_TOKEN` | ✅ | From @BotFather |
-| `BOT_API_KEY` | ✅ | Must match `forexedge-api` |
-| `API_URL` | ✅ | Internal URL of `forexedge-api` |
-| `STORE_URL` | ✅ | Public store URL |
-| `BOT_USERNAME` | ✅ | Telegram bot username |
-| `ADMIN_TELEGRAM_IDS` | optional | Comma-separated admin Telegram user IDs |
-| `ANTHROPIC_API_KEY` | optional | Enables AI chat replies |
-| `PITCH_COOLDOWN_SEC` | optional | Seconds between sales pitches (default: `300`) |
-
-### forexedge-userbot (Worker)
-
-| Variable | Required | Description |
-|---|---|---|
-| `TELEGRAM_API_ID` | ✅ | From my.telegram.org |
-| `TELEGRAM_API_HASH` | ✅ | From my.telegram.org |
-| `TELEGRAM_PHONE` | ✅ | Phone number for the userbot account |
-| `USERBOT_API_KEY` | ✅ | Must match `forexedge-api` |
-| `API_URL` | ✅ | Internal URL of `forexedge-api` |
-| `STORE_URL` | ✅ | Public store URL |
-| `TELEGRAM_SESSION_NAME` | optional | Session file path (default: `/tmp/forexedge_userbot`) |
-| `DM_DELAY_MIN` | optional | Min seconds between DMs (default: `60`) |
-| `DM_DELAY_MAX` | optional | Max seconds between DMs (default: `180`) |
-| `DM_PER_DAY_MAX` | optional | Daily DM cap (default: `15`) |
-| `GROUP_MSG_DELAY` | optional | Seconds between group posts (default: `900`) |
-| `JOIN_DELAY` | optional | Seconds between group joins (default: `45`) |
-
----
-
-## Database
-
-Supports both **SQLite** (default, zero config) and **PostgreSQL** (set `DATABASE_URL`).
-
-Migrations run automatically on deploy. To run manually:
-
+### 3. Run migrations
 ```bash
 python migrations.py
 ```
 
----
+### 4. Start (development)
+```bash
+flask --app app run --debug
+```
 
-## Admin Dashboard
-
-Visit `/admin` after deployment. Login with `ADMIN_USER` / `ADMIN_PASS`.
-
-From the dashboard you can:
-- Add / edit / delete products and upload files
-- View purchases and generate download tokens
-- Manage coupons and referral codes
-- View audit logs
-- Control userbot campaigns
+### 5. Run tests
+```bash
+pytest tests/ -v
+```
 
 ---
 
-## Affiliate Program
+## Deployment (Render)
 
-Customers can get a referral link via the Telegram bot (`/ref`). They earn **$5 per sale**, paid monthly on the 5th via PayPal.
+```bash
+# Connect your GitHub repo, then:
+render deploy --yaml render.yaml
+```
+
+After deploying:
+1. Go to Render → forex-saas-api → Environment
+2. Set `ADMIN_PASS_HASH` (from `python hash_password.py`)
+3. Set `PAYPAL_RECEIVER_EMAIL` (your actual PayPal email)
+4. Set `SMTP_USER` + `SMTP_PASS` (Gmail App Password)
+
+### First userbot run (one-time phone auth)
+```bash
+# SSH into Render forex-saas-userbot service
+python userbot.py
+# Enter your phone verification code when prompted
+# Session saved to /data/userbot_session — subsequent runs are automatic
+```
 
 ---
 
-## Common Issues
+## Monthly Referral Audit
 
-**`TemplateNotFound: store.html`** — HTML files must be inside a `templates/` folder. If you uploaded files via GitHub's UI directly to the repo root, move them into `templates/`.
+**Automatic:** Configure a cron job to POST to `/cron/monthly-audit` on the last day of each month:
+```bash
+# Render cron job (or any scheduler):
+curl -X POST https://yourstore.com/cron/monthly-audit \
+     -H "X-Cron-Key: your-CRON_KEY-from-env"
+```
 
-**Build exits with status 1** — Check the Render build logs. Usually a missing env var or import error in `app.py` on startup.
+**Manual:** Admin Panel → Dashboard → "Run Audit Now"
 
-**Userbot session** — The first run requires an interactive phone code confirmation. Run locally once to generate the session file, then upload the session string or use a persistent disk on Render.
+**Flow:**
+1. Last day of month: audit runs → email sent to `morrynet@gmail.com`
+2. Email lists all affiliates, their sales count, and PayPal address
+3. You pay each affiliate via PayPal (Friends & Family) by 5th of month
+4. Admin Panel → Payouts → click "Mark Paid" for each one
 
 ---
 
-## License
+## Security Architecture
 
-Private / proprietary. Not for redistribution.
+```
+Browser ──→ Flask API (4 gunicorn workers)
+                │
+                ├── Redis  ← rate limiting (shared across all workers)
+                │          ← bot conversation history
+                │
+                ├── PostgreSQL ← all business data
+                │
+                └── SMTP ← monthly audit emails
+
+Telegram ──→ Customer Service Bot (python-telegram-bot)
+                │
+                └── BOT_API_KEY → Flask /api/v1/*
+
+Telegram ──→ Marketing Userbot (Telethon)
+                │
+                └── USERBOT_API_KEY → Flask /api/v1/*
+```
+
+### Security checklist (all ✅)
+- [x] CSRF token on every state-changing POST
+- [x] Admin password: bcrypt hash
+- [x] Per-service API keys (bot ≠ userbot ≠ admin)
+- [x] PayPal IPN: VERIFIED + receiver_email + currency + amount ≥ $1
+- [x] Rate limiting via Redis (survives multiple gunicorn workers)
+- [x] Constant-time comparisons for all secrets (`hmac.compare_digest`)
+- [x] 64-character hex download tokens (brute-force resistant)
+- [x] Token expiry enforced on download
+- [x] No raw exceptions exposed to clients
+- [x] Audit log for all admin actions, IPN events, downloads
+- [x] Session cookies: `httponly=True`, `samesite=Lax`, `secure=True` in prod
+- [x] Input length caps on all user-supplied fields
+
+---
+
+## Userbot — Anti-Ban Strategy
+
+Campaigns start **OFF**. Enable them in `campaigns.json` following this schedule:
+
+| Week | Enable | Notes |
+|---|---|---|
+| 1 | `join_forex_groups` | Join 3-5 groups, no posting yet |
+| 2 | `daily_channel_posts`, `engagement_poll` | Build your own channel |
+| 3 | `broadcast_pitch` (max_groups=3) | Post in joined groups |
+| 4+ | `follow_up_warm_leads`, `dm_campaign` (limit=10) | DM hot leads only |
+| 6+ | Increase `DM_PER_DAY_MAX` to 20, then 30 | Gradual scale-up |
+
+**High-value target checklist (automated):**
+- ✅ Active in forex/EA discussion (not lurking)
+- ✅ Mentioned MT4/MT5/TradingView/FTMO/prop firm
+- ✅ Asking questions (warm signals: "looking for", "any good ea", "price?")
+- ✅ NOT previously contacted or ignored
+- ✅ Real account (has username or name)
+
+**Track what works:**
+- `sale_sources` table records which groups convert
+- Review weekly: `SELECT * FROM sale_sources ORDER BY conversion_rate DESC`
+- Double down on converting groups, drop zero-convert ones
+
+---
+
+## File Structure
+
+```
+forexedge/
+├── app.py              ← Flask API (all business logic)
+├── bot.py              ← Customer service Telegram bot
+├── userbot.py          ← Marketing userbot (Telethon)
+├── migrations.py       ← DB migration system
+├── hash_password.py    ← Admin password hashing utility
+├── campaigns.json      ← Userbot campaign config (all opt-in)
+├── render.yaml         ← Render deployment blueprint
+├── requirements.txt
+├── .env.example        ← All env vars documented
+├── templates/          ← Jinja2 HTML templates
+│   ├── store.html
+│   ├── admin.html      ← Full SPA: products/purchases/licenses/coupons/referrals/payouts/audit
+│   ├── download.html
+│   ├── lookup.html
+│   ├── success.html
+│   ├── login.html
+│   └── error.html
+└── tests/
+    └── test_app.py     ← 40+ pytest tests
+```

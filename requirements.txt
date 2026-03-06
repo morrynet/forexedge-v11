@@ -1,0 +1,33 @@
+# ForexEdge v3 — Python dependencies
+
+# Web framework
+flask==3.0.3
+gunicorn==22.0.0
+
+# Security
+werkzeug==3.0.3        # check_password_hash / generate_password_hash
+
+# Database
+psycopg2-binary==2.9.9 # PostgreSQL (production)
+
+# Redis (rate limiting + bot history)
+redis==5.0.8
+
+# HTTP client
+httpx==0.27.0
+
+# Telegram bots
+python-telegram-bot==20.7
+telethon==1.36.0
+
+# AI
+anthropic==0.30.0      # optional, only needed if using Claude API directly
+
+# Email (stdlib — no extra dep needed)
+
+# Testing
+pytest==8.3.2
+pytest-asyncio==0.23.8
+
+# Utilities
+python-dotenv==1.0.1   # load .env in dev
