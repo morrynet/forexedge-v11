@@ -85,7 +85,9 @@ BOT_API_KEY       = os.environ.get("BOT_API_KEY","")
 USERBOT_API_KEY   = os.environ.get("USERBOT_API_KEY","")
 API_SECRET        = os.environ.get("API_SECRET","")        # legacy compat
 PAYPAL_BUTTON_URL = os.environ.get("PAYPAL_BUTTON_URL","https://www.paypal.com/ncp/payment/Q4B6YUQN6X5GS")
-PAYPAL_RECEIVER   = os.environ.get("PAYPAL_RECEIVER_EMAIL","")
+PAYPAL_EMAIL      = os.environ.get("PAYPAL_EMAIL", os.environ.get("PAYPAL_RECEIVER_EMAIL",""))
+PAYPAL_RECEIVER   = os.environ.get("PAYPAL_RECEIVER_EMAIL", PAYPAL_EMAIL)
+BOT_USERNAME      = os.environ.get("BOT_USERNAME","forexedgev11bot")
 PAYPAL_IPN_URL    = "https://ipnpb.paypal.com/cgi-bin/webscr"
 PAYPAL_SANDBOX_IPN= "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr"
 SANDBOX           = os.environ.get("PAYPAL_SANDBOX","false").lower()=="true"
@@ -338,7 +340,16 @@ def run_referral_audit(triggered_by:str="cron")->dict:
 @app.route("/")
 def storefront():
     products=query("SELECT id,name,description,category,price FROM products WHERE active=1 ORDER BY created_at DESC",fetchall=True) or []
-    return render_template("store.html",products=products,price=PRICE_USD,paypal_url=PAYPAL_BUTTON_URL)
+    ref=request.args.get("ref","").strip().upper()
+    return render_template("store.html",
+        products=products,
+        price=PRICE_USD,
+        paypal_url=PAYPAL_BUTTON_URL,
+        paypal_email=PAYPAL_EMAIL,
+        bot_username=BOT_USERNAME,
+        store_url=STORE_URL,
+        exness_url=EXNESS_URL,
+        ref=ref)
 
 @app.route("/buy/<product_id>")
 @rate_limit(lambda:f"buy:{request.remote_addr}",max_t=20)
@@ -361,7 +372,8 @@ def coupon_check():
 def payment_success():
     products=query("SELECT id,name,category FROM products WHERE active=1 ORDER BY name",fetchall=True) or []
     return render_template("success.html",tx=request.args.get("tx",""),
-                           product_id=session.get("cart_product_id",""),products=products,price=PRICE_USD)
+                           product_id=session.get("cart_product_id",""),products=products,price=PRICE_USD,
+                           store_url=STORE_URL,paypal_email=PAYPAL_EMAIL,bot_username=BOT_USERNAME)
 
 @app.route("/payment/claim",methods=["POST"])
 @csrf_required
